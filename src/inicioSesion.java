@@ -4,6 +4,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,7 +24,37 @@ public class inicioSesion extends javax.swing.JFrame {
      * Creates new form inicioSesion
      */
     public inicioSesion() {
-        initComponents();
+       
+    }
+    
+    public int validarLogin(){
+        String usuario = txtUsuario.getText();
+        String contra = String.valueOf(jPasswordField1.getPassword());
+        
+        int resultado = 0;
+        String SSQL="SELECT * FROM usuarios='"+usuario+"' AND contraseña='"+contra+"'";
+        Connection con= null;
+        try{
+          Class.forName("org.postgresql.Driver");
+          con = (Connection)DriverManager.getConnection("jdbc:postgresql://localhost/INAH", "postgres", "m");
+                    
+          Statement st= con.createStatement();          
+          ResultSet rs= st.executeQuery(SSQL);
+          
+          if(rs.next()){
+              resultado=1;
+          }
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null, e, "ERROR DE CONEXION", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex, "ERROR DE DESCONEXION", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        return resultado;
     }
 
     /**
@@ -234,7 +267,16 @@ public class inicioSesion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void panelIngresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelIngresarMouseClicked
-        inicioSesión();
+      if(validarLogin()==1){
+          this.dispose();
+          
+         principal ventana= new principal();
+         ventana.setVisible(true);
+          
+      }else{
+          JOptionPane.showMessageDialog(null,"ACCESO DENEGADO:\n"
+          +"Por favor ingrese sus dtos correctamente","Acceso Denegado",JOptionPane.ERROR_MESSAGE);
+      }
     }//GEN-LAST:event_panelIngresarMouseClicked
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
