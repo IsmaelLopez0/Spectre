@@ -1,3 +1,10 @@
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -87,14 +94,23 @@ public class inicioSesion extends javax.swing.JFrame {
         txtUsuario.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jPasswordField1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPasswordField1.setText("jPasswordField1");
         jPasswordField1.setSelectionColor(new java.awt.Color(122, 72, 221));
 
         panelIngresar.setBackground(new java.awt.Color(53, 33, 89));
+        panelIngresar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                panelIngresarMouseClicked(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Ingresar");
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelIngresarLayout = new javax.swing.GroupLayout(panelIngresar);
         panelIngresar.setLayout(panelIngresarLayout);
@@ -156,10 +172,10 @@ public class inicioSesion extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addGap(97, 97, 97))
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(panelIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(70, 70, 70))
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(71, 71, 71))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
@@ -191,9 +207,9 @@ public class inicioSesion extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addGap(18, 18, 18)
                 .addComponent(panelIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 230, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
                 .addComponent(jLabel7)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,6 +233,52 @@ public class inicioSesion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void panelIngresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelIngresarMouseClicked
+        inicioSesión();
+    }//GEN-LAST:event_panelIngresarMouseClicked
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        inicioSesión();
+    }//GEN-LAST:event_jLabel6MouseClicked
+
+    //método para iniciar sesión, se utilizará para que funcione cuando el 
+    //usuario de clic en cualquier elemento (panelIngresar, jLabel6).
+    private void inicioSesión(){
+        String usuario = txtUsuario.getText();
+        String contra = jPasswordField1.getText(), contraBD="";
+        
+        //consulta existencia del usuaio
+        try{
+          //Conexión a la BD
+           Class.forName("org.postgresql.Driver");
+           Connection con = (Connection)DriverManager.getConnection(
+           "jdbc:postgresql://localhost/INAH","postgres","inah");
+           Statement sentencia = con.createStatement();
+           
+           //Llenar el combobox de Documentos a seleccionar
+           ResultSet contras = sentencia.executeQuery("SELECT * FROM usuarios WHERE usuario = '"+usuario+"'");
+           while(contras.next()){
+                contraBD = contras.getString("contraseña");
+           }
+           
+           //hacer comparación de consulta
+            if( contra.equals(contraBD) ){
+                javax.swing.JOptionPane.showMessageDialog(this, "Bienvenido "+usuario);
+                this.dispose();
+                principal p = new principal();
+                p.setVisible(true);
+            }else{
+                javax.swing.JOptionPane.showMessageDialog(this, "Error, usuario o contraseña no valida");
+            }
+           
+      }
+      catch(ClassNotFoundException | SQLException e){
+             e.printStackTrace();
+         }
+        //fin del catch
+        
+    }
+    
     /**
      * @param args the command line arguments
      */

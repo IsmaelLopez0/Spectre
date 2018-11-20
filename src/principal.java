@@ -170,14 +170,29 @@ public class principal extends javax.swing.JFrame {
         jPanel2.add(btnControlT, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 40));
 
         btnUsuarios.setBackground(new java.awt.Color(63, 43, 100));
+        btnUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUsuariosMouseClicked(evt);
+            }
+        });
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/user2.png"))); // NOI18N
         jLabel7.setText("  ");
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(204, 204, 204));
         jLabel8.setText("Control de usuarios");
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout btnUsuariosLayout = new javax.swing.GroupLayout(btnUsuarios);
         btnUsuarios.setLayout(btnUsuariosLayout);
@@ -391,6 +406,24 @@ public class principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuariosMouseClicked
+        controlUsuarios();
+    }//GEN-LAST:event_btnUsuariosMouseClicked
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        controlUsuarios();
+    }//GEN-LAST:event_jLabel8MouseClicked
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        controlUsuarios();
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void controlUsuarios(){
+        this.dispose();
+        panelControlUsuarios pCU = new panelControlUsuarios();
+        pCU.setVisible(true);
+    }
+    
     /**
      * @param args the command line arguments
      */
